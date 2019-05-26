@@ -461,6 +461,8 @@ sysinfo.txt
 *.apk
 *.unitypackage
 
+.idea/*
+
 # Crashlytics generated file
 
 

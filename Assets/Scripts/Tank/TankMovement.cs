@@ -15,7 +15,7 @@ public class TankMovement : MonoBehaviour
     private string m_TurnAxisName;              // The name of the input axis for turning.
     private Rigidbody m_Rigidbody;              // Reference used to move the tank.
     private float m_MovementInputValue;         // The current value of the movement input.
-    private float m_TurnInputValue;             // The current value of the turn input.
+//    private float m_TurnInputValue;             // The current value of the turn input.
     private float m_OriginalPitch;              // The pitch of the audio source at the start of the scene.
     private float m_maxSpeed = 15f;
     private float m_Acceleration = 0.4f;
@@ -34,7 +34,7 @@ public class TankMovement : MonoBehaviour
 
         // Also reset the input values.
         m_MovementInputValue = 0f;
-        m_TurnInputValue = 0f;
+//        m_TurnInputValue = 0f;
     }
 
 
@@ -47,6 +47,7 @@ public class TankMovement : MonoBehaviour
 
     private void Start()
     {
+//        Debug.Log("kjhsfkhsjkfhjshshjkshkfhjkshjkfs");
         // The axes names are based on player number.
         m_MovementAxisName = "Vertical" + m_PlayerNumber;
         m_TurnAxisName = "Horizontal" + m_PlayerNumber;
@@ -60,7 +61,7 @@ public class TankMovement : MonoBehaviour
     {
         // Store the value of both input axes.
         m_MovementInputValue = Input.GetAxis(m_MovementAxisName);
-        m_TurnInputValue = Input.GetAxis(m_TurnAxisName);
+//        m_TurnInputValue = Input.GetAxis(m_TurnAxisName);
 
         EngineAudio();
     }
@@ -69,7 +70,7 @@ public class TankMovement : MonoBehaviour
     private void EngineAudio()
     {
         // If there is no input (the tank is stationary)...
-        if (Mathf.Abs(m_MovementInputValue) < 0.1f && Mathf.Abs(m_TurnInputValue) < 0.1f)
+        if (Mathf.Abs(m_MovementInputValue) < 0.1f  /* && Mathf.Abs(m_TurnInputValue) < 0.1f */)
         {
             // ... and if the audio source is currently playing the driving clip...
             if (m_MovementAudio.clip == m_EngineDriving)
@@ -98,7 +99,7 @@ public class TankMovement : MonoBehaviour
     {
         // Adjust the rigidbodies position and orientation in FixedUpdate.
         Move();
-        Turn();
+//        Turn();
     }
 
 
@@ -112,23 +113,30 @@ public class TankMovement : MonoBehaviour
 
 
         // Adjust the velocity of the tank based on the player's input.
-        Vector3 velocity = m_Rigidbody.velocity;
-        velocity += transform.forward * m_MovementInputValue * m_Acceleration;
-        Vector3 direction = velocity.normalized;
-        velocity = direction * Mathf.Min(Mathf.Abs(velocity.magnitude), m_maxSpeed);
-        m_Rigidbody.velocity = velocity;
+        if (m_MovementInputValue == 1 || m_MovementInputValue == -1)
+        {
+            Vector3 tankPosition = m_Rigidbody.transform.position;
+            Vector3 newPosition = tankPosition + new Vector3(0, tankPosition.y, tankPosition.z + 0.2f) * Mathf.Sign(m_MovementInputValue);
+            m_Rigidbody.transform.position = newPosition;
+            
+        }
+//        Vector3 velocity = m_Rigidbody.velocity;
+//        velocity += transform.forward * m_MovementInputValue * m_Acceleration;
+//        Vector3 direction = velocity.normalized;
+//        velocity = direction * Mathf.Min(Mathf.Abs(velocity.magnitude), m_maxSpeed);
+//        m_Rigidbody.velocity = velocity;
     }
 
 
-    private void Turn()
-    {
-        // Determine the number of degrees to be turned based on the input, speed and time between frames.
-        float turn = m_TurnInputValue * m_TurnSpeed * Time.deltaTime;
-
-        // Make this into a rotation in the y axis.
-        Quaternion turnRotation = Quaternion.Euler(0f, turn, 0f);
-
-        // Apply this rotation to the rigidbody's rotation.
-        m_Rigidbody.MoveRotation(m_Rigidbody.rotation * turnRotation);
-    }
+//    private void Turn()
+//    {
+//        // Determine the number of degrees to be turned based on the input, speed and time between frames.
+//        float turn = m_TurnInputValue * m_TurnSpeed * Time.deltaTime;
+//
+//        // Make this into a rotation in the y axis.
+//        Quaternion turnRotation = Quaternion.Euler(0f, turn, 0f);
+//
+//        // Apply this rotation to the rigidbody's rotation.
+//        m_Rigidbody.MoveRotation(m_Rigidbody.rotation * turnRotation);
+//    }
 }
