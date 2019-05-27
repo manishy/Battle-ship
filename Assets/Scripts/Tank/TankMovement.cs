@@ -105,21 +105,21 @@ public class TankMovement : MonoBehaviour
 
     private void Move()
     {
-        // Create a vector in the direction the tank is facing with a magnitude based on the input, speed and the time between frames.
-        /*Vector3 movement = transform.forward * m_MovementInputValue * m_Speed * Time.deltaTime;
+        if (m_MovementInputValue > 0.9 || m_MovementInputValue < -0.9)
+        {
+            Vector3 movement = (transform.forward + new Vector3(0, transform.position.y,3))* Mathf.Sign(m_MovementInputValue) * Time.deltaTime;
 
-        // Apply this movement to the rigidbody's position.
-        m_Rigidbody.MovePosition(m_Rigidbody.position + movement); */
+            m_Rigidbody.MovePosition(m_Rigidbody.position + movement); 
+            
+        }
 
 
         // Adjust the velocity of the tank based on the player's input.
-        if (m_MovementInputValue == 1 || m_MovementInputValue == -1)
-        {
-            Vector3 tankPosition = m_Rigidbody.transform.position;
-            Vector3 newPosition = tankPosition + new Vector3(0, tankPosition.y, tankPosition.z + 0.2f) * Mathf.Sign(m_MovementInputValue);
-            m_Rigidbody.transform.position = newPosition;
-            
-        }
+//        if (m_MovementInputValue > 0.9 || m_MovementInputValue < -0.9)
+//        {
+//            Vector3 tankPosition = m_Rigidbody.transform.position;
+//            transform.position += Vector3.forward * Time.deltaTime + new Vector3(0, tankPosition.y,3) * Mathf.Sign(m_MovementInputValue);
+//        }
 //        Vector3 velocity = m_Rigidbody.velocity;
 //        velocity += transform.forward * m_MovementInputValue * m_Acceleration;
 //        Vector3 direction = velocity.normalized;
